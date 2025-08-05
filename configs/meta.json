@@ -1,0 +1,103 @@
+{
+  "dataset_info": {
+    "name": "MedicalPaperVQA",
+    "version": "1.0.0",
+    "description": "医学文献多模态理解数据集，用于InternVL2微调",
+    "created_date": "2024-01-01",
+    "task_types": [
+      "page_grounding",
+      "figure_caption",
+      "variable_extraction",
+      "table_reading",
+      "multi_figure",
+      "abstract_qa"
+    ],
+    "languages": ["zh", "en"],
+    "paper_domains": [
+      "clinical_medicine",
+      "biomedical_research",
+      "public_health"
+    ]
+  },
+  
+  "training_config": {
+    "model": "InternVL2-26B",
+    "max_dynamic_patch": 24,
+    "repeat_time": 1,
+    "shuffle": true,
+    "seed": 42,
+    "recommended_batch_size": 4,
+    "recommended_learning_rate": 2e-5
+  },
+  
+  "data_sources": {
+    "papers_fig_caption": {
+      "description": "图表摘要任务数据",
+      "path": "outputs/papers_fig_caption.jsonl",
+      "repeat_time": 2,
+      "max_dynamic_patch": 24,
+      "metadata": {
+        "task_type": "figure_caption",
+        "priority": "high",
+        "quality_score": 0.95
+      }
+    },
+    
+    "pages_grounding": {
+      "description": "页面定位任务数据",
+      "path": "outputs/pages_grounding.jsonl",
+      "repeat_time": 1,
+      "max_dynamic_patch": 16,
+      "metadata": {
+        "task_type": "page_grounding",
+        "priority": "medium",
+        "quality_score": 0.90
+      }
+    },
+    
+    "tables_reading": {
+      "description": "表格理解任务数据",
+      "path": "outputs/tables_reading.jsonl",
+      "repeat_time": 1,
+      "max_dynamic_patch": 36,
+      "metadata": {
+        "task_type": "table_reading",
+        "priority": "medium",
+        "quality_score": 0.85
+      }
+    },
+    
+    "multi_figure_analysis": {
+      "description": "多图对比任务数据",
+      "path": "outputs/multi_figure_analysis.jsonl",
+      "repeat_time": 1,
+      "max_dynamic_patch": 24,
+      "metadata": {
+        "task_type": "multi_figure",
+        "priority": "low",
+        "quality_score": 0.88
+      }
+    }
+  },
+  
+  "statistics": {
+    "total_papers": 0,
+    "total_samples": 0,
+    "task_distribution": {},
+    "quality_metrics": {
+      "schema_compliance": 0.0,
+      "coordinate_accuracy": 0.0,
+      "text_quality": 0.0
+    }
+  },
+  
+  "validation": {
+    "schema_version": "1.0",
+    "required_fields": {
+      "document": ["paper_id", "title", "abstract", "sections"],
+      "bbox": ["paper_id", "page_index", "bbox", "crop_path", "figure_type"]
+    },
+    "coordinate_tolerance": 5,
+    "max_aspect_ratio": 10.0
+  }
+}

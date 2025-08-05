@@ -1,0 +1,388 @@
+{
+  "$defs": {
+    "Affiliation": {
+      "additionalProperties": false,
+      "description": "作者单位",
+      "properties": {
+        "name": {
+          "description": "单位名称",
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "department": {
+          "anyOf": [
+            {
+              "maxLength": 300,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "部门",
+          "title": "Department"
+        },
+        "city": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "城市",
+          "title": "City"
+        },
+        "country": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "国家",
+          "title": "Country"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Affiliation",
+      "type": "object"
+    },
+    "Author": {
+      "additionalProperties": false,
+      "description": "作者信息",
+      "properties": {
+        "name": {
+          "description": "作者姓名",
+          "maxLength": 200,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "anyOf": [
+            {
+              "pattern": "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Email"
+        },
+        "orcid": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-\\d{4}-\\d{4}-\\d{3}[0-9X]$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Orcid"
+        },
+        "affiliation_ids": {
+          "description": "单位ID列表",
+          "items": {
+            "type": "integer"
+          },
+          "title": "Affiliation Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Author",
+      "type": "object"
+    },
+    "PageSpan": {
+      "description": "页面范围",
+      "properties": {
+        "page": {
+          "description": "页码，从0开始",
+          "minimum": 0,
+          "title": "Page",
+          "type": "integer"
+        },
+        "y1": {
+          "description": "起始Y坐标",
+          "minimum": 0.0,
+          "title": "Y1",
+          "type": "number"
+        },
+        "y2": {
+          "description": "结束Y坐标",
+          "exclusiveMinimum": 0.0,
+          "title": "Y2",
+          "type": "number"
+        }
+      },
+      "required": [
+        "page",
+        "y1",
+        "y2"
+      ],
+      "title": "PageSpan",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "Reference": {
+      "additionalProperties": false,
+      "description": "参考文献",
+      "properties": {
+        "raw_text": {
+          "description": "原始引用文本",
+          "maxLength": 2000,
+          "minLength": 1,
+          "title": "Raw Text",
+          "type": "string"
+        },
+        "doi": {
+          "anyOf": [
+            {
+              "pattern": "^10\\.\\d{4,9}/[-._;()\\/:a-zA-Z0-9]+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Doi"
+        },
+        "pmid": {
+          "anyOf": [
+            {
+              "pattern": "^\\d+$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pmid"
+        }
+      },
+      "required": [
+        "raw_text"
+      ],
+      "title": "Reference",
+      "type": "object"
+    },
+    "Section": {
+      "additionalProperties": false,
+      "description": "文档章节",
+      "properties": {
+        "title": {
+          "description": "章节标题",
+          "maxLength": 500,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "level": {
+          "description": "章节级别，1-6",
+          "maximum": 6,
+          "minimum": 1,
+          "title": "Level",
+          "type": "integer"
+        },
+        "text": {
+          "description": "章节内容，合并同级段落",
+          "maxLength": 32000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "page_spans": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/PageSpan"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "页面范围",
+          "title": "Page Spans"
+        }
+      },
+      "required": [
+        "title",
+        "level",
+        "text"
+      ],
+      "title": "Section",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "description": "文档级标注",
+  "properties": {
+    "paper_id": {
+      "description": "论文唯一ID",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "title": {
+      "description": "论文标题",
+      "maxLength": 500,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "abstract": {
+      "description": "摘要",
+      "maxLength": 5000,
+      "minLength": 1,
+      "title": "Abstract",
+      "type": "string"
+    },
+    "keywords": {
+      "anyOf": [
+        {
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 10,
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "关键词列表",
+      "title": "Keywords"
+    },
+    "sections": {
+      "description": "章节列表",
+      "items": {
+        "$ref": "#/$defs/Section"
+      },
+      "minItems": 1,
+      "title": "Sections",
+      "type": "array"
+    },
+    "authors": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Author"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "作者列表",
+      "title": "Authors"
+    },
+    "affiliations": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Affiliation"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "单位列表",
+      "title": "Affiliations"
+    },
+    "references": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "参考文献列表",
+      "title": "References"
+    },
+    "doi": {
+      "anyOf": [
+        {
+          "pattern": "^10\\.\\d{4,9}/[-._;()\\/:a-zA-Z0-9]+$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Doi"
+    },
+    "journal": {
+      "anyOf": [
+        {
+          "maxLength": 300,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "期刊名称",
+      "title": "Journal"
+    },
+    "publication_date": {
+      "anyOf": [
+        {
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Publication Date"
+    }
+  },
+  "required": [
+    "paper_id",
+    "title",
+    "abstract",
+    "sections"
+  ],
+  "title": "DocumentAnnotation",
+  "type": "object"
+}

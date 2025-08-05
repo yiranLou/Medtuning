@@ -1,0 +1,346 @@
+{
+  "$defs": {
+    "Axis": {
+      "additionalProperties": false,
+      "description": "坐标轴信息",
+      "properties": {
+        "x_label": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "X轴标签",
+          "title": "X Label"
+        },
+        "y_label": {
+          "anyOf": [
+            {
+              "maxLength": 200,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Y轴标签",
+          "title": "Y Label"
+        },
+        "x_unit": {
+          "anyOf": [
+            {
+              "maxLength": 50,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "X轴单位",
+          "title": "X Unit"
+        },
+        "y_unit": {
+          "anyOf": [
+            {
+              "maxLength": 50,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Y轴单位",
+          "title": "Y Unit"
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AxisScale"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "刻度类型"
+        }
+      },
+      "title": "Axis",
+      "type": "object"
+    },
+    "AxisScale": {
+      "description": "坐标轴刻度类型",
+      "enum": [
+        "linear",
+        "log"
+      ],
+      "title": "AxisScale",
+      "type": "string",
+      "additionalProperties": false
+    },
+    "BBox": {
+      "description": "边界框坐标",
+      "properties": {
+        "x1": {
+          "description": "左上角X坐标",
+          "minimum": 0,
+          "title": "X1",
+          "type": "integer"
+        },
+        "y1": {
+          "description": "左上角Y坐标",
+          "minimum": 0,
+          "title": "Y1",
+          "type": "integer"
+        },
+        "x2": {
+          "description": "右下角X坐标",
+          "exclusiveMinimum": 0,
+          "title": "X2",
+          "type": "integer"
+        },
+        "y2": {
+          "description": "右下角Y坐标",
+          "exclusiveMinimum": 0,
+          "title": "Y2",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "x1",
+        "y1",
+        "x2",
+        "y2"
+      ],
+      "title": "BBox",
+      "type": "object",
+      "additionalProperties": false
+    },
+    "FigureType": {
+      "description": "图表类型枚举",
+      "enum": [
+        "figure",
+        "table",
+        "equation",
+        "diagram",
+        "flowchart",
+        "other"
+      ],
+      "title": "FigureType",
+      "type": "string",
+      "additionalProperties": false
+    },
+    "Variable": {
+      "additionalProperties": false,
+      "description": "图表变量",
+      "properties": {
+        "name": {
+          "description": "变量名",
+          "maxLength": 100,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "role": {
+          "$ref": "#/$defs/VariableRole",
+          "description": "变量角色"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "maxLength": 50,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "单位，标准化为SI单位或空串",
+          "title": "Unit"
+        },
+        "category_values": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "分类变量的枚举值",
+          "title": "Category Values"
+        }
+      },
+      "required": [
+        "name",
+        "role"
+      ],
+      "title": "Variable",
+      "type": "object"
+    },
+    "VariableRole": {
+      "description": "变量角色枚举",
+      "enum": [
+        "x",
+        "y",
+        "group",
+        "series",
+        "confidence_interval",
+        "legend"
+      ],
+      "title": "VariableRole",
+      "type": "string",
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "description": "边界框级标注",
+  "properties": {
+    "paper_id": {
+      "description": "论文唯一ID",
+      "maxLength": 100,
+      "minLength": 1,
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "page_index": {
+      "description": "页码索引，从0开始",
+      "minimum": 0,
+      "title": "Page Index",
+      "type": "integer"
+    },
+    "bbox": {
+      "$ref": "#/$defs/BBox"
+    },
+    "crop_path": {
+      "description": "裁剪图相对路径",
+      "minLength": 1,
+      "title": "Crop Path",
+      "type": "string"
+    },
+    "figure_type": {
+      "$ref": "#/$defs/FigureType",
+      "description": "图表类型"
+    },
+    "caption": {
+      "anyOf": [
+        {
+          "maxLength": 1000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "图表标题，去除编号",
+      "title": "Caption"
+    },
+    "variables": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/Variable"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "变量列表",
+      "title": "Variables"
+    },
+    "axis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Axis"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "坐标轴信息"
+    },
+    "key_findings": {
+      "anyOf": [
+        {
+          "maxLength": 200,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "关键发现，一句话总结",
+      "title": "Key Findings"
+    },
+    "table_csv": {
+      "anyOf": [
+        {
+          "maxLength": 10000,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "表格CSV内容",
+      "title": "Table Csv"
+    },
+    "table_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "外部表格文件路径",
+      "title": "Table Path"
+    },
+    "confidence_score": {
+      "anyOf": [
+        {
+          "maximum": 1.0,
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "标注置信度",
+      "title": "Confidence Score"
+    }
+  },
+  "required": [
+    "paper_id",
+    "page_index",
+    "bbox",
+    "crop_path",
+    "figure_type"
+  ],
+  "title": "BBoxAnnotation",
+  "type": "object"
+}

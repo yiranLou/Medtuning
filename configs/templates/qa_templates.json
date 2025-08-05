@@ -1,0 +1,119 @@
+{
+  "templates": {
+    "page_grounding": {
+      "description": "页面定位任务模板",
+      "questions": [
+        "请在页面中找到关于{topic}的章节标题，并标出其位置。",
+        "页面中「{section_title}」这一节在哪里？请用边界框标注。",
+        "请定位页面中的{element_type}，并返回其坐标。",
+        "找出页面中{keyword}相关内容的位置。",
+        "标注出这一页中{section_title}章节的标题位置。"
+      ],
+      "answer_patterns": [
+        "<ref>{text}</ref><box>{bbox}</box>",
+        "在页面中找到了「{text}」，位置为：<ref>{text}</ref><box>{bbox}</box>",
+        "{element_type}位于：<ref>{text}</ref><box>{bbox}</box>"
+      ]
+    },
+    
+    "figure_caption": {
+      "description": "图表摘要任务模板",
+      "questions": [
+        "请用3-5句话总结这个{figure_type}的主要内容。",
+        "这个{figure_type}展示了什么？请简要描述其变量、趋势和主要结论。",
+        "请描述这个{figure_type}的内容，包括坐标轴含义和单位（如果有）。",
+        "简要说明这个{figure_type}的关键信息。",
+        "这个{figure_type}想要传达什么信息？"
+      ],
+      "structured_answer": true,
+      "answer_components": [
+        "figure_type_intro",
+        "variables_description",
+        "axis_description",
+        "key_findings",
+        "caption_fallback"
+      ]
+    },
+    
+    "variable_extraction": {
+      "description": "变量提取任务模板",
+      "questions": [
+        "这个图表中有哪些变量？它们的单位是什么？",
+        "请列出图中所有的变量名称、角色（自变量/因变量）和单位。",
+        "图表的横纵坐标分别代表什么？单位是什么？",
+        "提取图表中的所有变量信息。",
+        "这个图表测量了哪些指标？"
+      ],
+      "structured_output": true,
+      "output_format": "list"
+    },
+    
+    "table_reading": {
+      "description": "表格读取任务模板",
+      "questions": [
+        "表格中{row}行{column}列的值是多少？",
+        "请读取表格中{condition}条件下的数据。",
+        "将这个表格转换为CSV格式。",
+        "表格中{variable}的最大值和最小值分别是多少？",
+        "总结表格中的主要数据趋势。"
+      ],
+      "requires_ocr": true,
+      "fallback_response": "无法提取表格的结构化数据。"
+    },
+    
+    "multi_figure": {
+      "description": "多图对比任务模板",
+      "questions": [
+        "比较这{num}个图表，它们的主要区别是什么？",
+        "这些图表展示了什么趋势变化？请对比分析。",
+        "综合这些图表，可以得出什么结论？",
+        "这些图表之间有什么关联？",
+        "对比分析这些图表的异同点。"
+      ],
+      "min_figures": 2,
+      "max_figures": 4
+    },
+    
+    "abstract_qa": {
+      "description": "摘要问答任务模板",
+      "questions": [
+        "这篇论文的主要研究问题是什么？",
+        "论文的核心贡献和创新点是什么？",
+        "研究方法是什么？主要发现有哪些？",
+        "这项研究的临床意义是什么？",
+        "作者得出了什么结论？"
+      ],
+      "source": "abstract_and_sections",
+      "max_answer_length": 300
+    }
+  },
+  
+  "difficulty_levels": {
+    "easy": {
+      "description": "简单任务，直接提取",
+      "task_types": ["figure_caption", "abstract_qa"],
+      "weight": 0.5
+    },
+    "medium": {
+      "description": "中等难度，需要理解",
+      "task_types": ["variable_extraction", "page_grounding"],
+      "weight": 0.3
+    },
+    "hard": {
+      "description": "困难任务，需要推理",
+      "task_types": ["table_reading", "multi_figure"],
+      "weight": 0.2
+    }
+  },
+  
+  "language_variants": {
+    "zh": {
+      "name": "中文",
+      "weight": 0.7
+    },
+    "en": {
+      "name": "English",
+      "weight": 0.3
+    }
+  }
+}

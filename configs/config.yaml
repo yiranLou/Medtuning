@@ -1,0 +1,121 @@
+# 医学文献多模态理解数据集配置
+
+# 项目基础配置
+project:
+  name: "medical_paper_dataset"
+  version: "1.0.0"
+  description: "基于Mistral Document AI的医学文献结构化数据集"
+
+# 路径配置
+paths:
+  data_root: "./data"
+  raw_pdfs: "${paths.data_root}/raw_pdfs"
+  processed: "${paths.data_root}/processed"
+  outputs: "${paths.data_root}/outputs"
+  cache: "${paths.data_root}/.cache"
+
+# PDF处理配置
+pdf_processing:
+  renderer:
+    page_dpi: 200  # 页面渲染DPI (A4@200DPI ≈ 1654×2339)
+    crop_dpi: 300  # 裁剪图渲染DPI
+    color_mode: "RGB"
+    image_format: "PNG"
+    expand_margin: 16  # 裁剪扩边像素
+    max_dimension: 4096  # 最大维度限制
+    jpeg_quality: 95
+
+  detector:
+    use_pdffigures2: true
+    pdffigures2_path: "pdffigures2"  # PDFFigures2可执行文件路径
+    iou_threshold: 0.9  # 去重IoU阈值
+    min_figure_area: 10000  # 最小图表面积（像素）
+
+# Mistral API配置
+mistral:
+  model: "mistral-large-latest"
+  max_retries: 3
+  timeout: 300.0
+  temperature: 0.1
+  max_tokens: 4096
+  batch_size: 5  # 批处理大小
+  max_concurrent: 5  # 最大并发数
+
+# 标注策略配置
+annotation:
+  document:
+    batch_pages: 5  # 每批处理页数
+    overlap_pages: 1  # 批次间重叠页数
+    use_streaming: true  # 大文档使用流式处理
+    
+  bbox:
+    use_anchor_text: true  # 使用锚定文本
+    anchor_margin: 50  # 锚定文本扩展边距
+    min_confidence: 0.8  # 最小置信度
+
+# InternVL2数据集配置
+internvl2:
+  # 任务类型权重
+  task_weights:
+    page_grounding: 0.15      # 页面定位
+    figure_caption: 0.40      # 图表摘要（重点）
+    variable_extraction: 0.15  # 变量提取
+    table_reading: 0.15       # 表格读取
+    multi_figure: 0.10        # 多图对比
+    abstract_qa: 0.05         # 摘要问答
+  
+  # 动态切片配置
+  max_dynamic_patch:
+    page_image: 16    # 普通页图
+    figure_image: 24  # 科学图表
+    table_image: 36   # 复杂表格
+  
+  # 采样配置
+  sampling:
+    max_samples_per_paper: 50  # 每篇论文最大样本数
+    min_samples_per_task: 100  # 每个任务最小样本数
+    balance_papers: true       # 平衡论文分布
+    random_seed: 42
+
+# 质量控制配置
+quality_control:
+  consistency:
+    strict_mode: true  # 严格模式
+    check_grounding: true  # 检查定位坐标
+    check_units: true  # 检查单位标准化
+    
+  deduplication:
+    text_similarity_threshold: 0.95  # 文本相似度阈值
+    image_hash_size: 16  # 图像hash大小
+    image_max_distance: 5  # 图像hash最大距离
+    
+  validation:
+    validate_schema: true  # 验证Schema
+    validate_paths: true   # 验证文件路径
+    validate_coords: true  # 验证坐标
+    sample_ratio: 0.05     # 抽样验证比例
+
+# 输出配置
+output:
+  formats:
+    - "jsonl"  # InternVL2 JSONL格式
+    - "parquet"  # Parquet格式（可选）
+    
+  compression: false  # 是否压缩
+  split_ratio:  # 数据集划分
+    train: 0.8
+    val: 0.1
+    test: 0.1
+
+# 日志配置
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/pipeline.log"
+  console: true
+
+# 资源限制
+resources:
+  max_memory_gb: 16  # 最大内存使用
+  max_workers: 4     # 最大工作进程数
+  gpu_memory_fraction: 0.8  # GPU内存使用比例

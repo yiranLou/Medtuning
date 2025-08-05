@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project specific
+data/raw_pdfs/*.pdf
+data/processed/
+data/outputs/
+!data/outputs/example_dataset.jsonl
+!data/outputs/dataset_quality_report.md
+logs/
+*.log
+.env
+
+# Cache
+.cache/
+*.cache
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+test_*.py
+demo_*.py
+fix_*.py
+
+# Keep directory structure
+!data/.gitkeep
+!data/raw_pdfs/.gitkeep
+!data/processed/.gitkeep
+!data/outputs/.gitkeep
+!logs/.gitkeep
