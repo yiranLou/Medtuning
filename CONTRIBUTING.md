@@ -6,7 +6,7 @@
 
 ### 报告问题
 
-1. 在 [Issues](https://github.com/Albatross-studio/Medtuning/issues) 中搜索是否已有相似问题
+1. 在 [Issues](https://github.com/yiranLou/Medtuning/issues) 中搜索是否已有相似问题
 2. 如果没有，创建新的 Issue，并提供：
    - 问题的详细描述
    - 复现步骤
@@ -54,7 +54,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Albatross-studio/Medtuning.git
+git clone https://github.com/yiranLou/Medtuning.git
 cd Medtuning
 
 # 创建虚拟环境
@@ -106,6 +106,6 @@ pytest --cov=src tests/
 
 - 查看 [文档](README.md)
 - 在 Issues 中提问
-- 发送邮件至 contact@albatross-studio.com
+- 发送邮件至 contact@yiranlou.com
 
 再次感谢您的贡献！

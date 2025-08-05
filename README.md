@@ -23,7 +23,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Albatross-studio/Medtuning.git
+git clone https://github.com/yiranLou/Medtuning.git
 cd Medtuning
 
 # 安装依赖
@@ -237,5 +237,5 @@ MIT License - 详见 [LICENSE](LICENSE) 文件
 
 ## 📧 联系方式
 
-- GitHub Issues: [提交问题](https://github.com/Albatross-studio/Medtuning/issues)
-- Email: contact@albatross-studio.com
+- GitHub Issues: [提交问题](https://github.com/yiranLou/Medtuning/issues)
+- Email: contact@yiranlou.com
