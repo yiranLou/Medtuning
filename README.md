@@ -1,10 +1,14 @@
-# MedTuning - 医学文献多模态数据集构建工具
+# MedTuning - 医学文献多模态数据集构建工具 (增强版)
 
 基于 Mistral Document AI 的医学文献 PDF 结构化数据集构建工具，专为 InternVL2 模型微调设计。
 
 ## 🌟 特性
 
 - **两层Schema设计**：文档级和边界框级标注，支持整页问答和图表理解
+- **增强的图表和表格检测**：
+  - 检测所有图片、表格和公式
+  - 支持无边框表格检测
+  - 多种检测方法组合
 - **零/低幻觉生成**：基于结构化字段的模板化Q/A生成
 - **智能标注策略**：分批处理、防漂移、锚定文本
 - **完整质量控制**：Schema验证、坐标检查、去重、一致性检查
@@ -51,14 +55,17 @@ cp /path/to/your/pdfs/*.pdf data/raw_pdfs/
 ### 4. 运行流水线
 
 ```bash
-# 处理所有PDF
+# 使用基础流水线
 python scripts/run_pipeline.py
 
+# 使用增强流水线（推荐）
+python scripts/run_enhanced_pipeline.py
+
 # 处理单个PDF
-python scripts/run_pipeline.py -f data/raw_pdfs/paper.pdf
+python scripts/run_enhanced_pipeline.py -f data/raw_pdfs/paper.pdf
 
 # 调试模式
-python scripts/run_pipeline.py --debug
+python scripts/run_enhanced_pipeline.py --debug
 ```
 
 ### 5. 验证数据集
@@ -79,6 +86,9 @@ python scripts/validate_dataset.py data/outputs/internvl2_dataset.jsonl -o valid
 │   ├── core/                    # 核心模块
 │   │   ├── schemas/            # 数据模型定义
 │   │   ├── pdf_processor/      # PDF处理
+│   │   │   ├── renderer.py    # PDF渲染
+│   │   │   ├── detector.py    # 基础检测器
+│   │   │   └── enhanced_detector.py  # 增强检测器
 │   │   └── validators/         # 数据验证
 │   ├── annotation/             # Mistral标注
 │   ├── dataset/                # 数据集生成
@@ -156,6 +166,26 @@ internvl2:
 ```
 
 ## 🔧 高级用法
+
+### 使用增强的检测器
+
+```python
+from src.core.pdf_processor.enhanced_detector import EnhancedFigureTableDetector
+
+# 创建检测器
+detector = EnhancedFigureTableDetector()
+
+# 检测所有元素
+results = detector.detect_all_elements(pdf_path)
+
+print(f"图表: {len(results['figures'])}个")
+print(f"表格: {len(results['tables'])}个")
+print(f"公式: {len(results['equations'])}个")
+
+# 保存检测结果
+for i, fig in enumerate(results['figures']):
+    renderer.crop_region(fig.page_index, fig.bbox, f"figure_{i}.png")
+```
 
 ### 自定义Q/A模板
 
