@@ -32,12 +32,13 @@ wheels/
 *~
 
 # Project specific
-data/raw_pdfs/*.pdf
-data/processed/
-data/outputs/
-!data/outputs/example_dataset.jsonl
-!data/outputs/dataset_quality_report.md
-output/
+# 暂时注释掉，以便提交data和output目录
+# data/raw_pdfs/*.pdf
+# data/processed/
+# data/outputs/
+# !data/outputs/example_dataset.jsonl
+# !data/outputs/dataset_quality_report.md
+# output/
 logs/
 *.log
 .env
