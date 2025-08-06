@@ -487,12 +487,22 @@ class EnhancedFigureTableDetector:
         """获取单个绘图元素的边界框"""
         if 'rect' in drawing:
             rect = drawing['rect']
-            return BBox(
-                x1=int(rect.x0),
-                y1=int(rect.y0),
-                x2=int(rect.x1),
-                y2=int(rect.y1)
-            )
+            x1 = int(rect.x0)
+            y1 = int(rect.y0)
+            x2 = int(rect.x1)
+            y2 = int(rect.y1)
+            
+            # 确保x2 > x1 和 y2 > y1
+            if x2 <= x1:
+                x1, x2 = min(x1, x2), max(x1, x2)
+                if x2 <= x1:
+                    x2 = x1 + 1
+            if y2 <= y1:
+                y1, y2 = min(y1, y2), max(y1, y2)
+                if y2 <= y1:
+                    y2 = y1 + 1
+                    
+            return BBox(x1=x1, y1=y1, x2=x2, y2=y2)
         
         # 处理路径
         min_x = float('inf')
@@ -508,12 +518,22 @@ class EnhancedFigureTableDetector:
                 max_x = max(max_x, point.x)
                 max_y = max(max_y, point.y)
         
-        return BBox(
-            x1=int(min_x) if min_x != float('inf') else 0,
-            y1=int(min_y) if min_y != float('inf') else 0,
-            x2=int(max_x) if max_x != float('-inf') else 0,
-            y2=int(max_y) if max_y != float('-inf') else 0
-        )
+        # 确保坐标有效
+        if min_x == float('inf') or max_x == float('-inf'):
+            return BBox(x1=0, y1=0, x2=1, y2=1)
+        
+        # 确保x2 > x1 和 y2 > y1
+        x1 = int(min_x)
+        y1 = int(min_y)
+        x2 = int(max_x)
+        y2 = int(max_y)
+        
+        if x2 <= x1:
+            x2 = x1 + 1
+        if y2 <= y1:
+            y2 = y1 + 1
+            
+        return BBox(x1=x1, y1=y1, x2=x2, y2=y2)
     
     def _get_group_bbox(self, group: List[Dict]) -> BBox:
         """获取组的边界框"""
@@ -532,12 +552,22 @@ class EnhancedFigureTableDetector:
             max_x = max(max_x, bbox.x2)
             max_y = max(max_y, bbox.y2)
         
-        return BBox(
-            x1=int(min_x),
-            y1=int(min_y),
-            x2=int(max_x),
-            y2=int(max_y)
-        )
+        # 确保坐标有效
+        if min_x == float('inf') or max_x == float('-inf'):
+            return BBox(x1=0, y1=0, x2=1, y2=1)
+        
+        # 确保x2 > x1 和 y2 > y1
+        x1 = int(min_x)
+        y1 = int(min_y)
+        x2 = int(max_x)
+        y2 = int(max_y)
+        
+        if x2 <= x1:
+            x2 = x1 + 1
+        if y2 <= y1:
+            y2 = y1 + 1
+            
+        return BBox(x1=x1, y1=y1, x2=x2, y2=y2)
     
     def _has_figure_characteristics(self, group: List[Dict]) -> bool:
         """检查是否具有图表特征"""

@@ -8,7 +8,8 @@ from PIL import Image
 
 from .mistral_client import MistralClient
 from ..core.schemas import BBoxAnnotation, BBoxPage, BBox
-from ..core.pdf_processor import PDFRenderer, DetectedFigure
+from ..core.pdf_processor import PDFRenderer
+from ..core.pdf_processor.working_enhanced_detector import DetectedFigure
 
 logger = logging.getLogger(__name__)
 

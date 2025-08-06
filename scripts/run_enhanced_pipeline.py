@@ -19,7 +19,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from src.core.schemas import DocumentAnnotation, BBoxAnnotation
 from src.core.pdf_processor import PDFRenderer, RenderConfig
-from src.core.pdf_processor.enhanced_detector import EnhancedFigureTableDetector
+from src.core.pdf_processor.working_enhanced_detector import WorkingEnhancedDetector
 from src.annotation import (
     MistralConfig, 
     MistralClient,
@@ -159,7 +159,7 @@ class EnhancedPipeline:
         # 2. 增强的图表和表格检测
         detected_elements = {'figures': [], 'tables': [], 'equations': []}
         if not skip_detection:
-            detector = EnhancedFigureTableDetector()
+            detector = WorkingEnhancedDetector()
             detected_elements = detector.detect_all_elements(pdf_path)
             
             logger.info(f"增强检测结果:")
