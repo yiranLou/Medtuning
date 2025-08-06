@@ -37,6 +37,7 @@ data/processed/
 data/outputs/
 !data/outputs/example_dataset.jsonl
 !data/outputs/dataset_quality_report.md
+output/
 logs/
 *.log
 .env
@@ -53,9 +54,7 @@ Thumbs.db
 tmp/
 temp/
 *.tmp
-test_*.py
-demo_*.py
-fix_*.py
+test_pdf_processing.py
 
 # Keep directory structure
 !data/.gitkeep
